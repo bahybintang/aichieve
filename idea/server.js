@@ -5,7 +5,9 @@ const mongoose = require('mongoose')
 const Ideas = require('./model/idea')
 const bodyParser = require('body-parser')
 dotenv.config()
-mongoose.connect(`mongodb://localhost:27017/aichieve`, { useNewUrlParser: true })
+mongoose.connect(`mongodb://localhost:27017/aichieve`, { useNewUrlParser: true }, (err) => {
+    if (err) res.send({ status: "failed", message: "something is wrong in our end :((" })
+})
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -18,7 +20,7 @@ app.post('/idea/:userID/add', (req, res) => {
     })
     idea.save(err => {
         if (err) {
-            res.send(JSON.stringify({ status: "error" }))
+            res.send(JSON.stringify({ status: "failed" }))
         }
         else {
             res.send(JSON.stringify({ status: "success" }))
