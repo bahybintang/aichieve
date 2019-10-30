@@ -5,12 +5,12 @@ const request = require('request')
 dotenv.config()
 
 app.use('/auth', (req, res) => {
-    var url = 'http://aichieve-auth:4200/auth' + req.url
+    var url = 'http://aichieve-auth/auth' + req.url
     req.pipe(request(url)).pipe(res)
 })
 
 app.use('/idea', (req, res) => {
-    var url = 'http://aichieve-idea:6969/idea' + req.url
+    var url = 'http://aichieve-idea/idea' + req.url
     req.pipe(request(url)).pipe(res)
 })
 
