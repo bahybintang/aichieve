@@ -8,7 +8,7 @@ const User = require('./model/user')
 const jwt = require('jsonwebtoken')
 dotenv.config()
 mongoose.connect(`mongodb://aichieve-mongodb:27017/aichieve`, { useNewUrlParser: true }, (err) => {
-    if (err) res.send({ status: "failed", message: "something is wrong in our end :((" })
+    if (err) throw(err)
 })
 
 var db = mongoose.connection

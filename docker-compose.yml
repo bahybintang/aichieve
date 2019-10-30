@@ -10,6 +10,11 @@ services:
     container_name: idea
     ports:
       - "49002:13337"
+  aichieve-main:
+    build: main/.
+    container_name: main
+    ports:
+      - "49003:13337"
   aichieve-mongodb:
     container_name: mongodb
     image: mongo
