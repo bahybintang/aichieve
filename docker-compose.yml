@@ -1,0 +1,24 @@
+version: '3'
+services:
+  aichieve-auth:
+    build: auth/.
+    container_name: auth
+    ports:
+      - "49001:13337"
+  aichieve-idea:
+    build: idea/.
+    container_name: idea
+    ports:
+      - "49002:13337"
+  aichieve-mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+networks:
+    default:
+    internal:
+        internal: true
+

@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const Ideas = require('./model/idea')
 const bodyParser = require('body-parser')
 dotenv.config()
-mongoose.connect(`mongodb://localhost:27017/aichieve`, { useNewUrlParser: true }, (err) => {
+mongoose.connect(`mongodb://aichieve-mongodb:27017/aichieve`, { useNewUrlParser: true }, (err) => {
     if (err) res.send({ status: "failed", message: "something is wrong in our end :((" })
 })
 
