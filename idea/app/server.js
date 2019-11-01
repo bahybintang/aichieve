@@ -44,4 +44,31 @@ app.post('/idea/:userID/add', (req, res) => {
     }
 })
 
+app.get('/idea/get', (req, res) => {
+    var titleQ = new RegExp(escapeRegExp(req.query.title) || "", "i")
+    var descriptionQ = new RegExp(escapeRegExp(req.query.description) || "", "i")
+    var query = {
+        $and: [
+            { title: { $regex: titleQ } },
+            { description: { $regex: descriptionQ } }
+        ]
+    }
+
+    Ideas.find(query, (err, result) => {
+        if (err) {
+            res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+        }
+        else {
+            res.send({ status: "success", data: result })
+        }
+    })
+})
+
+app.get('/idea/')
+
 app.listen(process.env.PORT, () => console.log(`Idea app listening on port ${process.env.PORT}!`))
+
+function escapeRegExp(string) {
+    if (string) return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched stringe
+    else return ""
+}
