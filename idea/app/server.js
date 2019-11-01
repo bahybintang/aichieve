@@ -15,11 +15,9 @@ app.use(bodyParser.json());
 
 app.post('/idea/:userID/add', (req, res) => {
     if (req.body.title != undefined && req.body.description != undefined) {
-        User.findOne({ username: req.params.userID }, (err, data) => {
-            if (err) {
-                res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
-            }
-            else if (data == undefined) {
+        User.findOne({ username: req.params.userID })
+        .then(data => {
+            if (data == undefined) {
                 res.send(JSON.stringify({ status: "failed", message: "user not found" }))
             }
             else {
@@ -38,6 +36,9 @@ app.post('/idea/:userID/add', (req, res) => {
                 })
             }
         })
+        .catch(err => {
+            res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+        })
     }
     else {
         res.send(JSON.stringify({ status: "failed", message: "Pliss fill all slurr :((" }))
@@ -54,13 +55,12 @@ app.get('/idea/get', (req, res) => {
         ]
     }
 
-    Ideas.find(query, (err, result) => {
-        if (err) {
-            res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
-        }
-        else {
-            res.send({ status: "success", data: result })
-        }
+    Ideas.find(query)
+    .then(result => {
+        res.send({ status: "success", data: result })
+    })
+    .catch(err => {
+        res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
     })
 })
 

@@ -18,11 +18,9 @@ app.use(bodyParser.json());
 
 app.post('/auth/register', (req, res) => {
     if (req.body.name != undefined && req.body.username != undefined && req.body.password != undefined) {
-        User.findOne({ username: req.body.username }, (err, data) => {
-            if (err) {
-                res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
-            }
-            else if (data == undefined) {
+        User.findOne({ username: req.body.username })
+        .then(data => {
+            if (data == undefined) {
                 var user = new User({ name: req.body.name, username: req.body.username, password: bcrypt.hashSync(req.body.password, 10) })
                 user.save(err => {
                     if (err) {
@@ -37,6 +35,9 @@ app.post('/auth/register', (req, res) => {
                 res.send(JSON.stringify({ status: "failed", message: "username already taken" }))
             }
         })
+        .catch(err => {
+            res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+        })
     }
     else {
         res.send(JSON.stringify({ status: "failed", message: "pliss fill all slurr :((((" }))
@@ -45,11 +46,9 @@ app.post('/auth/register', (req, res) => {
 
 app.post('/auth/login', (req, res) => {
     if (req.body.username != undefined && req.body.password != undefined) {
-        User.findOne({ username: req.body.username }, (err, data) => {
-            if (err) {
-                res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
-            }
-            else if (data == undefined) {
+        User.findOne({ username: req.body.username })
+        .then(data => {{
+            if (data == undefined) {
                 res.send(JSON.stringify({ status: "failed", message: "username or password salah :((" }))
             }
             else {
@@ -60,6 +59,9 @@ app.post('/auth/login', (req, res) => {
                     res.send(JSON.stringify({ status: "failed", message: "username or password salah :((" }))
                 }
             }
+        }})
+        .catch(err => {
+            res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
         })
     }
     else {
