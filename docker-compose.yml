@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   aichieve-mongodb:
     container_name: mongodb
@@ -12,18 +12,23 @@ services:
     container_name: auth
     ports:
       - "49001:13337"
+    depends_on:
+      - aichieve-mongodb
   aichieve-idea:
     build: idea/.
     container_name: idea
     ports:
       - "49002:13337"
+    depends_on:
+      - aichieve-mongodb
   aichieve-main:
     build: main/.
     container_name: main
     ports:
       - "49003:13337"
-networks:
-    default:
-    internal:
-        internal: true
+    depends_on:
+      - aichieve-mongodb
 
+networks: 
+  default:
+    driver: bridge
