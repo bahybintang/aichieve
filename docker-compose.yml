@@ -1,5 +1,12 @@
 version: '3'
 services:
+  aichieve-mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
   aichieve-auth:
     build: auth/.
     container_name: auth
@@ -15,13 +22,6 @@ services:
     container_name: main
     ports:
       - "49003:13337"
-  aichieve-mongodb:
-    container_name: mongodb
-    image: mongo
-    volumes:
-      - ./data:/data/db
-    ports:
-      - "27017:27017"
 networks:
     default:
     internal:
