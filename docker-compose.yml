@@ -6,26 +6,26 @@ services:
     volumes:
       - ./data:/data/db
     ports:
-      - "27017:27017"
+      - "27017:80"
   aichieve-auth:
     build: auth/.
     container_name: auth
     ports:
-      - "49001:13337"
+      - "49001:80"
     depends_on:
       - aichieve-mongodb
   aichieve-idea:
     build: idea/.
     container_name: idea
     ports:
-      - "49002:13337"
+      - "49002:80"
     depends_on:
       - aichieve-mongodb
   aichieve-main:
     build: main/.
     container_name: main
     ports:
-      - "49003:13337"
+      - "49003:80"
     depends_on:
       - aichieve-mongodb
 

@@ -17,7 +17,7 @@ const options = {
 
 const connectWithRetry = () => {
     console.log('MongoDB connection with retry')
-    mongoose.connect(`mongodb://aichieve-mongodb:27017/aichieve`, options)
+    mongoose.connect(`mongodb://aichieve-mongodb/aichieve`, options)
     .then(() => {
         console.log('MongoDB is connected')
     })
@@ -74,8 +74,8 @@ app.get('/idea/get', (req, res) => {
     }
 
     Ideas.find(query)
-        .then(result => {
-            res.send({ status: "success", data: result })
+        .then(data => {
+            res.send({ status: "success", data })
         })
         .catch(err => {
             res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
