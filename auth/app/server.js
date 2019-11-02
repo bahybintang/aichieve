@@ -18,7 +18,7 @@ const options = {
 
 const connectWithRetry = () => {
     console.log('MongoDB connection with retry');
-    mongoose.connect(`mongodb://aichieve-mongodb:27017/aichieve`, options)
+    mongoose.connect(`mongodb://aichieve-mongodb/aichieve`, options)
     .then(() => {
         console.log('MongoDB is connected')
     })
