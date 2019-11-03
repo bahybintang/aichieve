@@ -28,6 +28,13 @@ services:
       - "49003:80"
     depends_on:
       - aichieve-mongodb
+  aichieve-frontend:
+    build: frontend/.
+    container_name: frontend
+    ports:
+      - "49004:80"
+    depends_on:
+      - aichieve-mongodb
 
 networks: 
   default:
