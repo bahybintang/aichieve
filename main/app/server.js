@@ -13,8 +13,8 @@ app.use('/idea', (req, res) => {
 })
 
 app.use('/', (req, res) => {
-    var url = process.env.NODE_ENV == 'dev' ? 'http://0.0.0.0:8082/' + req.url : 'http://aichieve-frontend/' + req.url
+    var url = process.env.NODE_ENV == 'dev' ? 'http://0.0.0.0:8082' + req.url : 'http://aichieve-frontend' + req.url
     req.pipe(request(url)).pipe(res)
 })
 
-app.listen(process.env.PORT, process.env.HOST, () => console.log(`Idea app listening on http://${process.env.HOST}:${process.env.PORT}!`))
+app.listen(process.env.PORT, process.env.HOST, () => console.log(`Main app listening on http://${process.env.HOST}:${process.env.PORT}!`))
