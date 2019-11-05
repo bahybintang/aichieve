@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const User = require('./model/user')
 const jwt = require('jsonwebtoken')
-const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017` : `mongodb://aichieve-mongodb/aichieve`
+const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017/aichieve` : `mongodb://aichieve-mongodb/aichieve`
 
 const options = {
     autoIndex: false,

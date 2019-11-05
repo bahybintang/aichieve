@@ -5,7 +5,7 @@ const Ideas = require('./model/idea')
 const User = require('./model/user')
 const bodyParser = require('body-parser')
 
-const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017` : `mongodb://aichieve-mongodb/aichieve`
+const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017/aichieve` : `mongodb://aichieve-mongodb/aichieve`
 
 const options = {
     autoIndex: false,
