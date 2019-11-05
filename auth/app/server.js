@@ -1,35 +1,26 @@
 const express = require('express')
 const app = express()
-const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const User = require('./model/user')
 const jwt = require('jsonwebtoken')
-dotenv.config()
+const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017` : `mongodb://aichieve-mongodb/aichieve`
 
 const options = {
     autoIndex: false,
-    reconnectTries: 100,
+    reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 500,
     poolSize: 10,
-    bufferMaxEntries: 0
+    bufferMaxEntries: 0,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }
 
-const connectWithRetry = () => {
-    console.log('MongoDB connection with retry');
-    mongoose.connect(`mongodb://aichieve-mongodb/aichieve`, options)
-    .then(() => {
-        console.log('MongoDB is connected')
-    })
-    .catch(err => {
-        console.log('MongoDB connection unsuccessful');
-        setTimeout(connectWithRetry, 1000)
-    });
-}
-connectWithRetry()
-
-var db = mongoose.connection
+mongoose.connect(connectionString, options, err => {
+    if (err) console.log(err)
+    else console.log("Connected to MongoDB!")
+})
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

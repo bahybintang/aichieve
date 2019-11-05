@@ -1,0 +1,24 @@
+{
+  "name": "aichieve",
+  "version": "1.0.0",
+  "description": "aichieve apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "(cd main/app && npm run dev) && (cd idea/app && npm run dev) && (cd auth/app && npm run dev) && (cd frontend/app && npm run dev)",
+    "prod": "docker compose up"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahybintang/aichieve.git"
+  },
+  "author": "bintang, faqih, angger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bahybintang/aichieve/issues"
+  },
+  "homepage": "https://github.com/bahybintang/aichieve#readme",
+  "dependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
