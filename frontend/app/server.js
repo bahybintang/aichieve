@@ -10,4 +10,4 @@ app.get(['/', '/login'], (req, res) => {
     res.sendFile(__dirname + '/build/index.html')
 })
 
-app.listen(process.env.PORT, () => console.log(`Idea app listening on port ${process.env.PORT}!`))
+app.listen(process.env.PORT, process.env.HOST, () => console.log(`Idea app listening on http://${process.env.HOST}:${process.env.PORT}!`))

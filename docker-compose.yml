@@ -4,7 +4,7 @@ services:
     container_name: mongodb
     image: mongo
     volumes:
-      - ./data:/data/db
+      - mongodata:/data/db
     ports:
       - "27017:80"
   aichieve-auth:
@@ -36,6 +36,10 @@ services:
     depends_on:
       - aichieve-mongodb
 
-networks: 
-  default:
-    driver: bridge
+volumes:
+  mongodata:
+    external: false
+    
+# networks: 
+#   default:
+#     driver: bridge

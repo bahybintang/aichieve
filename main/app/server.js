@@ -14,4 +14,8 @@ app.use('/idea', (req, res) => {
     req.pipe(request(url)).pipe(res)
 })
 
-app.listen(process.env.PORT, () => console.log(`Idea app listening on port ${process.env.PORT}!`))
+app.get('/', (req, res) => {
+    res.send({ test: "test" })
+})
+
+app.listen(process.env.PORT, process.env.HOST, () => console.log(`Idea app listening on http://${process.env.HOST}:${process.env.PORT}!`))
