@@ -18,7 +18,7 @@ export default class Login extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    fetch('/auth/login', {
+    fetch('http://localhost:8080/auth/login', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
@@ -26,7 +26,7 @@ export default class Login extends Component {
       }
     })
     .then(res => {
-      if (res.status === 200) {
+      if (res.status === "success") {
         this.props.history.push('/');
       } else {
         const error = new Error(res.error);
@@ -66,7 +66,7 @@ export default class Login extends Component {
             <span>Masukkan Password Anda!</span>
           </li>
           <li>
-            <input type="submit" Value="Submit" />
+            <input type="submit" value="Submit" />
           </li>
         </ul>
       </form>
