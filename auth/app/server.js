@@ -54,6 +54,7 @@ app.post('/auth/register', (req, res) => {
 })
 
 app.post('/auth/login', (req, res) => {
+    console.log("eeq");
     if (req.body.username != undefined && req.body.password != undefined) {
         User.findOne({ username: req.body.username })
             .then(data => {

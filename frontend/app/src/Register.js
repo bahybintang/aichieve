@@ -36,7 +36,7 @@ export default class Register extends Component {
     })
     .catch(err => {
       console.error(err);
-      alert('Gagal Login');
+      alert('Gagal Register');
     });
   }
 
