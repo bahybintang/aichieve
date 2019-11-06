@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const Ideas = require('./model/idea')
 const User = require('./model/user')
 const bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken')
+const auth = require('./middleware/jwt_auth')
 
 const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017/aichieve` : `mongodb://aichieve-mongodb/aichieve`
 
@@ -25,7 +27,12 @@ mongoose.connect(connectionString, options, err => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post('/idea/:userID/add', (req, res) => {
+app.post('/idea/:userID/add', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    if (res.locals.isAdmin !== true && req.params.userID != undefined && req.params.userID != payload.username) {
+        res.send({ status: "failed", message: "cannot edit other user" })
+    }
+
     if (req.body.title != undefined && req.body.description != undefined) {
         User.findOne({ username: req.params.userID })
             .then(data => {
@@ -57,7 +64,7 @@ app.post('/idea/:userID/add', (req, res) => {
     }
 })
 
-app.get('/idea/get', (req, res) => {
+app.get('/idea/get', auth.user, (req, res) => {
     var titleQ = new RegExp(escapeRegExp(req.query.title) || "", "i")
     var descriptionQ = new RegExp(escapeRegExp(req.query.description) || "", "i")
     var query = {

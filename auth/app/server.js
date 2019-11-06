@@ -5,7 +5,9 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const User = require('./model/user')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 const connectionString = process.env.NODE_ENV == 'dev' ? `mongodb://localhost:27017/aichieve` : `mongodb://aichieve-mongodb/aichieve`
+const privateKey = fs.readFileSync('./private.pem', 'utf-8')
 
 const options = {
     autoIndex: false,
@@ -36,7 +38,7 @@ app.post('/auth/register', (req, res) => {
                             res.send(JSON.stringify({ status: "failed", message: "failed save to db" }))
                         }
                         else {
-                            res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, process.env.KEY) }))
+                            res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) }))
                         }
                     })
                 }
@@ -63,7 +65,7 @@ app.post('/auth/login', (req, res) => {
                     }
                     else {
                         if (bcrypt.compareSync(req.body.password, data.password)) {
-                            res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, process.env.KEY) }))
+                            res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) }))
                         }
                         else {
                             res.send(JSON.stringify({ status: "failed", message: "username or password salah :((" }))
@@ -73,6 +75,7 @@ app.post('/auth/login', (req, res) => {
             })
             .catch(err => {
                 res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+                console.log(err)
             })
     }
     else {

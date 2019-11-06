@@ -20,6 +20,8 @@
   "homepage": "https://github.com/bahybintang/aichieve#readme",
   "dependencies": {
     "concurrently": "^5.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.0",
     "nodemon": "^1.19.4"
   }
 }
