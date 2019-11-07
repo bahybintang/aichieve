@@ -33,19 +33,20 @@ app.post('/auth/register', (req, res) => {
             .then(data => {
                 if (data == undefined) {
                     req.body.password = bcrypt.hashSync(req.body.password, 10)
+                    delete req.body.role
                     return User({ ...req.body }).save()
                 }
                 else return Promise.reject(new Error("username already taken!"))
             })
             .then(() => {
-                res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) }))
+                res.send({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) })
             })
             .catch(err => {
                 res.send({ status: "failed", message: err.toString() })
             })
     }
     else {
-        res.send(JSON.stringify({ status: "failed", message: "pliss fill all slurr :((((" }))
+        res.send({ status: "failed", message: "pliss fill all slurr :((((" })
     }
 })
 
@@ -65,7 +66,7 @@ app.post('/auth/login', (req, res) => {
             })
     }
     else {
-        res.send(JSON.stringify({ status: "failed", message: "pliss fill all slurr :((((" }))
+        res.send({ status: "failed", message: "pliss fill all slurr :((((" })
     }
 })
 

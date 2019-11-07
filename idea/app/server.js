@@ -34,7 +34,7 @@ app.post('/idea/:userID/add', auth.user, (req, res) => {
         User.findOne({ username: req.params.userID })
             .then(data => {
                 if (data == undefined) return Promise.reject(new Error("user not found!"))
-                else if (res.locals.isAdmin !== true && res.userID != payload.username) return Promise.reject(new Error("You cannot add other user idea"))
+                else if (res.locals.isAdmin !== true && data.username != payload.username) return Promise.reject(new Error("You cannot add other user idea"))
                 return new Ideas({ userID: req.params.userID, ...req.body }).save()
             })
             .then(data => {
@@ -44,9 +44,7 @@ app.post('/idea/:userID/add', auth.user, (req, res) => {
                 res.send({ status: "failed", message: err.toString() })
             })
     }
-    else {
-        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
-    }
+    else res.send({ status: "failed", message: "Pliss fill all slurr :((" })
 })
 
 app.get('/idea/get', auth.user, (req, res) => {
