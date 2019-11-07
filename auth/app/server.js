@@ -28,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/auth/register', (req, res) => {
+    console.log(req.body)
     if (req.body.name != undefined && req.body.username != undefined && req.body.password != undefined) {
         User.findOne({ username: req.body.username })
             .then(data => {

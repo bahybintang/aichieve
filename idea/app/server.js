@@ -3,6 +3,8 @@ const app = express()
 const mongoose = require('mongoose')
 const Ideas = require('./model/idea')
 const User = require('./model/user')
+const Request = require('./model/request')
+const Offer = require('./model/offer')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 const auth = require('./middleware/jwt_auth')
@@ -99,6 +101,72 @@ app.put('/idea/:ideaID/update', auth.user, (req, res) => {
             res.send({ status: "failed", message: err.toString() })
         })
 })
+
+app.post('/idea/:ideaID/request', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { _id: req.body.ideaID, requesterID: payload.username }
+    if (req.body.ideaID != undefined && req.body.ideaOwnerID != undefined) {
+        Idea.findOne({ _id: query._id })
+            .then(data => {
+                if (data == undefined) return Promise.reject(new Error("idea not found!"))
+                else if(data.userID == payload.username) return Promise.reject(new Error("You cannot request to join your own idea"))
+                return new Request({ requesterID: query.requesterID, ideaOwnerID: data.userID, ideaID: ideaID})
+            })
+            .then(data => {
+                res.send({ status: "success", data })
+            })
+            .catch(err => {
+                res.send({ status: "failed", message: err.toString() })
+            })
+    }
+    else {
+        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
+    }
+})
+
+app.post('/idea/:ideaID/request', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { _id: req.body.ideaID, requesterID: payload.username }
+    if (req.body.ideaID != undefined && req.body.ideaOwnerID != undefined) {
+        Idea.findOne({ _id: query._id })
+            .then(data => {
+                if (data == undefined) return Promise.reject(new Error("idea not found!"))
+                else if(data.userID === payload.username) return Promise.reject(new Error("You cannot request to join your own idea"))
+                return new Request({ requesterID: query.requesterID, ideaOwnerID: data.userID, ideaID: query._id})
+            })
+            .then(data => {
+                res.send({ status: "success", data })
+            })
+            .catch(err => {
+                res.send({ status: "failed", message: err.toString() })
+            })
+    }
+    else {
+        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
+    }
+})
+
+app.post('/idea/:ideaID/offer', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    if (req.body.ideaID != undefined && req.body.requestedUserID != undefined) {
+        Idea.findOne({ _id: query._id })
+            .then(data => {
+                if (data == undefined) return Promise.reject(new Error("idea not found!"))
+                else if(data.userID !== payload.username) return Promise.reject(new Error("You cannot offer idea that you don't own"))
+                return new Offer({ requestedUserID: req.body.requestedUserID, ideaOwnerID: data.userID, ideaID: query._id})
+            })
+            .then(data => {
+                res.send({ status: "success", data })
+            })
+            .catch(err => {
+                res.send({ status: "failed", message: err.toString() })
+            })
+    }
+    else {
+        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
+    }
+})
+
 
 app.listen(process.env.PORT, process.env.HOST, () => console.log(`Idea app listening on http://${process.env.HOST}:${process.env.PORT}!`))
 
