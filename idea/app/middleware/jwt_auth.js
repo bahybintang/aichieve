@@ -7,16 +7,17 @@ user = (req, res, next) => {
     var token = req.headers.token
     res.locals.isAdmin = false
     jwt.verify(token, publicKey, { algorithm: ['RS256'] }, (err, payload) => {
-        if (err) res.send({ status: "failed", ...err })
+        if (err) res.send({ status: "failed", message: err.toString() })
         else {
-            User.findOne({ username: payload.username }, (err, data) => {
-                if (err) res.send({ status: "failed", ...err })
-                else if (data == undefined) res.send({ status: "failed", message: "user not found" })
-                else {
-                    if (data.role === 'admin') res.locals.isAdmin = true
+            User.findOne({ username: payload.username })
+                .then(data => {
+                    if (data == undefined) return Promise.reject(new Error("user not found!"))
+                    else if (data.role === 'admin') res.locals.isAdmin = true
                     return next()
-                }
-            })
+                })
+                .catch(err => {
+                    res.send({ status: "failed", message: err.toString() })
+                })
         }
     })
 }
@@ -26,15 +27,16 @@ admin = (req, res, next) => {
     jwt.verify(token, publicKey, { algorithm: ['RS256'] }, (err, payload) => {
         if (err) res.send({ status: "failed", ...err })
         else {
-            User.findOne({ username: payload.username }, (err, data) => {
-                if (err) res.send({ status: "failed", ...err })
-                else if (data == undefined) res.send({ status: "failed", message: "user not found" })
-                else {
-                    if (data.role === 'admin') return next()
-                    else res.send({ status: "failed", message: "not admin" })
-                }
-            })
-        }
+            User.findOne({ username: payload.username })
+                .then(data => {
+                    if (data == undefined) return Promise.reject(new Error("user not found!"))
+                    else if (data.role === 'admin') return next()
+                    return Promise.reject(new Error("Not admin!"))
+                })
+                .catch(err => {
+                    res.send({ status: "failed", message: err.toString() })
+                })
+}
     })
 }
 

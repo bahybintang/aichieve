@@ -16,7 +16,8 @@ const options = {
     poolSize: 10,
     bufferMaxEntries: 0,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }
 
 mongoose.connect(connectionString, options, err => {
@@ -29,48 +30,34 @@ app.use(bodyParser.json());
 
 app.post('/idea/:userID/add', auth.user, (req, res) => {
     let payload = jwt.decode(req.headers.token)
-    if (res.locals.isAdmin !== true && req.params.userID != undefined && req.params.userID != payload.username) {
-        res.send({ status: "failed", message: "cannot edit other user" })
-    }
-
     if (req.body.title != undefined && req.body.description != undefined) {
         User.findOne({ username: req.params.userID })
             .then(data => {
-                if (data == undefined) {
-                    res.send(JSON.stringify({ status: "failed", message: "user not found" }))
-                }
-                else {
-                    var idea = new Ideas({
-                        userID: req.params.userID,
-                        title: req.body.title,
-                        description: req.body.description
-                    })
-                    idea.save(err => {
-                        if (err) {
-                            res.send(JSON.stringify({ status: "failed", message: "fail add to db" }))
-                        }
-                        else {
-                            res.send(JSON.stringify({ status: "success" }))
-                        }
-                    })
-                }
+                if (data == undefined) return Promise.reject(new Error("user not found!"))
+                else if (res.locals.isAdmin !== true && res.userID != payload.username) return Promise.reject(new Error("You cannot add other user idea"))
+                return new Ideas({ userID: req.params.userID, ...req.body }).save()
+            })
+            .then(data => {
+                res.send({ status: "success", data })
             })
             .catch(err => {
-                res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+                res.send({ status: "failed", message: err.toString() })
             })
     }
     else {
-        res.send(JSON.stringify({ status: "failed", message: "Pliss fill all slurr :((" }))
+        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
     }
 })
 
 app.get('/idea/get', auth.user, (req, res) => {
     var titleQ = new RegExp(escapeRegExp(req.query.title) || "", "i")
     var descriptionQ = new RegExp(escapeRegExp(req.query.description) || "", "i")
+    var userIDQ = new RegExp(escapeRegExp(req.query.userID) || "", "i")
     var query = {
         $and: [
             { title: { $regex: titleQ } },
-            { description: { $regex: descriptionQ } }
+            { description: { $regex: descriptionQ } },
+            { userID: { $regex: userIDQ } }
         ]
     }
 
@@ -79,11 +66,39 @@ app.get('/idea/get', auth.user, (req, res) => {
             res.send({ status: "success", data })
         })
         .catch(err => {
-            res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+            res.send({ status: "failed", message: err.toString() })
         })
 })
 
-app.get('/idea/')
+app.delete('/idea/:ideaID/delete', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { _id: req.params.ideaID, userID: payload.username }
+    if (res.locals.isAdmin) delete query.userID
+
+    Ideas.findOneAndDelete(query)
+        .then(data => {
+            if (data == undefined) return Promise.reject(new Error("ideas not found"))
+            res.send({ status: "success", message: `Successfully deleted ${data.title}!` })
+        })
+        .catch(err => {
+            res.send({ status: "failed", message: err.toString() })
+        })
+})
+
+app.put('/idea/:ideaID/update', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { _id: req.params.ideaID, userID: payload.username }
+    if (res.locals.isAdmin) delete query.userID
+
+    Ideas.findOneAndUpdate(query, req.body)
+        .then(data => {
+            if (data == undefined) return Promise.reject(new Error("ideas not found"))
+            res.send({ status: "success", message: `Successfully updated ${data.title}!` })
+        })
+        .catch(err => {
+            res.send({ status: "failed", message: err.toString() })
+        })
+})
 
 app.listen(process.env.PORT, process.env.HOST, () => console.log(`Idea app listening on http://${process.env.HOST}:${process.env.PORT}!`))
 

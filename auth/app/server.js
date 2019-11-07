@@ -32,22 +32,16 @@ app.post('/auth/register', (req, res) => {
         User.findOne({ username: req.body.username })
             .then(data => {
                 if (data == undefined) {
-                    var user = new User({ name: req.body.name, username: req.body.username, password: bcrypt.hashSync(req.body.password, 10) })
-                    user.save(err => {
-                        if (err) {
-                            res.send(JSON.stringify({ status: "failed", message: "failed save to db" }))
-                        }
-                        else {
-                            res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) }))
-                        }
-                    })
+                    req.body.password = bcrypt.hashSync(req.body.password, 10)
+                    return User({ ...req.body }).save()
                 }
-                else {
-                    res.send(JSON.stringify({ status: "failed", message: "username already taken" }))
-                }
+                else return Promise.reject(new Error("username already taken!"))
+            })
+            .then(() => {
+                res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) }))
             })
             .catch(err => {
-                res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
+                res.send({ status: "failed", message: err.toString() })
             })
     }
     else {
@@ -56,27 +50,18 @@ app.post('/auth/register', (req, res) => {
 })
 
 app.post('/auth/login', (req, res) => {
-    console.log("eeq");
     if (req.body.username != undefined && req.body.password != undefined) {
         User.findOne({ username: req.body.username })
             .then(data => {
-                {
-                    if (data == undefined) {
-                        res.send(JSON.stringify({ status: "failed", message: "username or password salah :((" }))
-                    }
-                    else {
-                        if (bcrypt.compareSync(req.body.password, data.password)) {
-                            res.send(JSON.stringify({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) }))
-                        }
-                        else {
-                            res.send(JSON.stringify({ status: "failed", message: "username or password salah :((" }))
-                        }
-                    }
-                }
+                if (data == undefined) return Promise.reject(new Error("username or password wrong!"))
+                else if (bcrypt.compareSync(req.body.password, data.password)) return Promise.resolve(data)
+                else return Promise.reject(new Error("username or password wrong!"))
+            })
+            .then(data => {
+                res.send({ status: "success", token: jwt.sign({ username: data.username }, privateKey, { algorithm: 'RS256' }) })
             })
             .catch(err => {
-                res.send(JSON.stringify({ status: "failed", message: ".something error on our side" }))
-                console.log(err)
+                res.send({ status: "failed", message: err.toString() })
             })
     }
     else {
