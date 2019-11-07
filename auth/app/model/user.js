@@ -8,7 +8,6 @@ var userSchema = new mongoose.Schema({
     bio: { type: String },
     joined_idea: [ String ],
     role: { type: String, default: 'user' }
-
 })
 var Users = mongoose.model('Users', userSchema)
 

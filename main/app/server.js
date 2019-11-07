@@ -5,8 +5,8 @@ const cors = require('cors')
 
 app.use(cors())
 
-app.use('/auth', (req, res) => {
-    var url = process.env.NODE_ENV == 'dev' ? 'http://0.0.0.0:8083/auth' + req.url : 'http://aichieve-auth/auth' + req.url
+app.use(['/auth', '/users'], (req, res) => {
+    var url = process.env.NODE_ENV == 'dev' ? 'http://0.0.0.0:8083' + req.originalUrl : 'http://aichieve-auth' + req.originalUrl
     req.pipe(request(url)).pipe(res)
 })
 
