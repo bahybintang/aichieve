@@ -103,27 +103,28 @@ app.put('/users/:userID/update', auth.user, (req, res) => {
 })
 
 app.get('/users', auth.user, (req, res) => {
-    var idea, skill
-    try {
-        idea = JSON.parse(req.query.joined_idea)
-    } catch (err) {
-        idea = []
-    }
-
-    try {
-        skill = JSON.parse(req.query.skills)
-    } catch (err) {
-        skill = [""]
-    }
     var query = {
         $and: [
             { username: { $regex: new RegExp(escapeRegExp(req.query.username) || "", "i") } },
             { name: { $regex: new RegExp(escapeRegExp(req.query.name) || "", "i") } },
             { role: { $regex: new RegExp(escapeRegExp(req.query.role) || "", "i") } },
-            { bio: { $regex: new RegExp(escapeRegExp(req.query.bio) || "", "i") } },
-            { $or: skill.map(val => { return { skills: { $regex: new RegExp(escapeRegExp(val) || "", "i") } } }) },
-            { $or: idea.map(val => { return { joined_idea: val } }) }
+            { bio: { $regex: new RegExp(escapeRegExp(req.query.bio) || "", "i") } }
         ]
+    }
+    try {
+        var idea = JSON.parse(req.query.joined_idea)
+        var pushed = { $or: idea.map(val => { return { joined_idea: val } }) }
+        if (pushed.$or.length > 0) query.$and.push(pushed)
+    } catch (err) {
+        console.log(err)
+    }
+
+    try {
+        var skill = JSON.parse(req.query.skills)
+        var pushed = { $or: skill.map(val => { return { skills: { $regex: new RegExp(escapeRegExp(val) || "", "i") } } }) }
+        if (pushed.$or.length > 0) query.$and.push(pushed)
+    } catch (err) {
+        console.log(err)
     }
 
     User.find(query)
