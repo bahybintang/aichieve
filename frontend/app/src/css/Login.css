@@ -128,3 +128,12 @@
   font-size: 5vh;
   font-family: montserrat;
 }
+
+.yourDream {
+  font-size: 5vh;
+  font-family: montserrat;
+  color: #3498db !important;
+  font-weight: 700;
+  text-align: center;
+  margin-top: -25px;
+}

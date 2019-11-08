@@ -61,8 +61,6 @@ export default class Register extends Component {
       </div>
       </Col>
 
-
-
       <Col>
       <div>
       <p className="logintext"> Hello, Welcome Back! </p>
