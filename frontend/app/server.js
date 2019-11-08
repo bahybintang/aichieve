@@ -1,10 +1,10 @@
 const express = require('express')
 const app = express()
 const dotenv = require('dotenv')
+const path = require('path')
 dotenv.config()
 
-app.use(express.static(__dirname + "./build"))
-app.use(express.static(__dirname + "./public"))
+app.use(express.static(path.join(__dirname, "build")))
 
 app.get(['/', '/login'], (req, res) => {
     res.sendFile(__dirname + '/build/index.html')

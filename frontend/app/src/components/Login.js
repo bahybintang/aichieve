@@ -32,10 +32,14 @@ export default class Register extends Component {
     .then(res => {
       if (res.status === 200) {
         this.props.history.push('/beranda');
+        res.json()
       } else {
         const error = new Error(res.error);
         throw error;
       }
+    })
+    .then(data => {
+      console.log(data)
     })
     .catch(err => {
       console.error(err);
