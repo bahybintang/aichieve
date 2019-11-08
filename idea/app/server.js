@@ -27,7 +27,7 @@ mongoose.connect(connectionString, options, err => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post('/idea/:userID/add', auth.user, (req, res) => {
+app.post('/idea/:userID/add', auth.user , (req, res) => {
     let payload = jwt.decode(req.headers.token)
     if (res.locals.isAdmin !== true && req.params.userID != undefined && req.params.userID != payload.username) {
         res.send({ status: "failed", message: "cannot edit other user" })
