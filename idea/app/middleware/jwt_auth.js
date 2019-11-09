@@ -16,7 +16,7 @@ user = (req, res, next) => {
                     return next()
                 })
                 .catch(err => {
-                    res.send({ status: "failed", message: err.toString() })
+                    res.status(401).send({ status: "failed", message: err.toString() })
                 })
         }
     })
@@ -34,7 +34,7 @@ admin = (req, res, next) => {
                     return Promise.reject(new Error("Not admin!"))
                 })
                 .catch(err => {
-                    res.send({ status: "failed", message: err.toString() })
+                    res.status(401).send({ status: "failed", message: err.toString() })
                 })
 }
     })

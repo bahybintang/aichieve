@@ -44,11 +44,11 @@ app.post('/auth/register', (req, res) => {
                 res.send({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) })
             })
             .catch(err => {
-                res.send({ status: "failed", message: err.toString() })
+                res.status(400).send({ status: "failed", message: err.toString() })
             })
     }
     else {
-        res.send({ status: "failed", message: "pliss fill all slurr :((((" })
+        res.status(400).send({ status: "failed", message: "pliss fill all slurr :((((" })
     }
 })
 
@@ -80,7 +80,7 @@ app.delete('/users/:userID/delete', auth.admin, (req, res) => {
             res.send({ status: "success", message: `Successfully deleted ${data.username}!` })
         })
         .catch(err => {
-            res.send({ status: "failed", message: err.toString() })
+            res.status(404).send({ status: "failed", message: err.toString() })
         })
 })
 
@@ -98,7 +98,7 @@ app.put('/users/:userID/update', auth.user, (req, res) => {
             res.send({ status: "success", message: `Successfully updated ${data.username}!` })
         })
         .catch(err => {
-            res.send({ status: "failed", message: err.toString() })
+            res.status(400).send({ status: "failed", message: err.toString() })
         })
 })
 
@@ -133,7 +133,7 @@ app.get('/users', auth.user, (req, res) => {
         })
         .catch(err => {
             console.log(err)
-            res.send({ status: "failed", message: err.toString() })
+            res.status(500).send({ status: "failed", message: err.toString() })
         })
 })
 
