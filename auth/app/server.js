@@ -41,7 +41,7 @@ app.post('/auth/register', (req, res) => {
                 else return Promise.reject(new Error("username already taken!"))
             })
             .then(() => {
-                res.send({ status: "success", token: jwt.sign({ username: req.body.username }, privateKey, { algorithm: 'RS256' }) })
+                res.send({ status: "success", token: jwt.sign({ username: req.body.username, role: "user" }, privateKey, { algorithm: 'RS256' }) })
             })
             .catch(err => {
                 res.status(400).send({ status: "failed", message: err.toString() })
@@ -61,7 +61,7 @@ app.post('/auth/login', (req, res) => {
                 else return Promise.reject(new Error("username or password wrong!"))
             })
             .then(data => {
-                res.send({ status: "success", token: jwt.sign({ username: data.username }, privateKey, { algorithm: 'RS256' }) })
+                res.send({ status: "success", token: jwt.sign({ username: data.username, role: data.role }, privateKey, { algorithm: 'RS256' }) })
             })
             .catch(err => {
                 res.status(401).send({ status: "failed", message: err.toString() })
