@@ -4,11 +4,9 @@ const dotenv = require('dotenv')
 const path = require('path')
 dotenv.config()
 
-const secret = 'nubbangetsi';
-
 app.use(express.static(path.join(__dirname, "build")))
 
-app.get(['/', '/login', '/register'], (req, res) => {
+app.get(['/', '/login'], (req, res) => {
     res.sendFile(__dirname + '/build/index.html')
 })
 

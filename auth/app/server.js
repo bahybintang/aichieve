@@ -64,11 +64,11 @@ app.post('/auth/login', (req, res) => {
                 res.send({ status: "success", token: jwt.sign({ username: data.username }, privateKey, { algorithm: 'RS256' }) })
             })
             .catch(err => {
-                res.send({ status: "failed", message: err.toString() })
+                res.status(401).send({ status: "failed", message: err.toString() })
             })
     }
     else {
-        res.send({ status: "failed", message: "pliss fill all slurr :((((" })
+        res.status(401).send({ status: "failed", message: "pliss fill all slurr :((((" })
     }
 })
 
