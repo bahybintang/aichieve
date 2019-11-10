@@ -77,7 +77,7 @@ export default class AuthService {
         // Setting Authorization header
         // Authorization: Bearer xxxxxxx.xxxxxxxx.xxxxxx
         if (this.loggedIn()) {
-            headers['token'] =this.token()
+            headers['token'] = this.getToken()
         }
 
         return fetch(url, {

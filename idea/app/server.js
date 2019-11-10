@@ -43,10 +43,10 @@ app.post('/idea/:userID/add', auth.user , (req, res) => {
                 res.send({ status: "success", data })
             })
             .catch(err => {
-                res.send({ status: "failed", message: err.toString() })
+                res.status(400).send({ status: "failed", message: err.toString() })
             })
     }
-    else res.send({ status: "failed", message: "Pliss fill all slurr :((" })
+    else res.status(400).send({ status: "failed", message: "Pliss fill all slurr :((" })
 })
 
 app.get('/idea/get', auth.user, (req, res) => {
@@ -66,7 +66,7 @@ app.get('/idea/get', auth.user, (req, res) => {
             res.send({ status: "success", data })
         })
         .catch(err => {
-            res.send({ status: "failed", message: err.toString() })
+            res.status(400).send({ status: "failed", message: err.toString() })
         })
 })
 
@@ -81,7 +81,7 @@ app.delete('/idea/:ideaID/delete', auth.user, (req, res) => {
             res.send({ status: "success", message: `Successfully deleted ${data.title}!` })
         })
         .catch(err => {
-            res.send({ status: "failed", message: err.toString() })
+            res.status(400).send({ status: "failed", message: err.toString() })
         })
 })
 
@@ -96,7 +96,7 @@ app.put('/idea/:ideaID/update', auth.user, (req, res) => {
             res.send({ status: "success", message: `Successfully updated ${data.title}!` })
         })
         .catch(err => {
-            res.send({ status: "failed", message: err.toString() })
+            res.status(400).send({ status: "failed", message: err.toString() })
         })
 })
 
@@ -119,11 +119,11 @@ app.post('/idea/:ideaID/request', auth.user, (req, res) => {
                 res.send({ status: "success", data })
             })
             .catch(err => {
-                res.send({ status: "failed", message: err.toString() })
+                res.status(400).send({ status: "failed", message: err.toString() })
             })
     }
     else {
-        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
+        res.status(400).send({ status: "failed", message: "Pliss fill all slurr :((" })
     }
 })
 
@@ -150,11 +150,11 @@ app.post('/idea/:ideaID/offer', auth.user, (req, res) => {
                 res.send({ status: "success", data })
             })
             .catch(err => {
-                res.send({ status: "failed", message: err.toString() })
+                res.status(400).send({ status: "failed", message: err.toString() })
             })
     }
     else {
-        res.send({ status: "failed", message: "Pliss fill all slurr :((" })
+        res.status(400).send({ status: "failed", message: "Pliss fill all slurr :((" })
     }
 })
 
