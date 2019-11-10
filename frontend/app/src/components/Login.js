@@ -3,6 +3,7 @@ import Background1 from './background1';
 import {Container, Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import '../css/Login.css'
+import auth from './util/auth'
 
 export default class Register extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ export default class Register extends Component {
       username : '',
       password: ''
     };
+    this.auth = new auth();
   }
 
   handleInputChange = (event) => {
@@ -30,20 +32,24 @@ export default class Register extends Component {
       }
     })
     .then(res => {
-      if (res.status === 200) {
-        this.props.history.push('/beranda');
-        res.json()
+      if (res.status === 200) {        
+        
+        res.json();
+
+        console.log(res);
+        this.auth.setToken(res.token);
+        this.props.history.push('/');
       } else {
         const error = new Error(res.error);
         throw error;
       }
     })
     .then(data => {
-      console.log(data)
+      //console.log(data);
     })
     .catch(err => {
       console.error(err);
-      alert('Gagal Register');
+      alert('Gagal Login');
     });
   }
 
@@ -67,8 +73,8 @@ export default class Register extends Component {
       </div>
 
       <div>
-      <form onSubmit={this.onSubmit} className="formStyle" style={{marginTop: "150px"}}>
-      <h1 className="tagline">Login</h1>
+      <form onSubmit={this.onSubmit} className="formStyle" style={{marginTop: "100px"}}>
+      <h1 className="tagline" style={{paddingBottom: "50px"}}>Login</h1>
         <ul>
           <li>
             <label htmlFor="username">User Name</label>

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "env-cmd": "^10.0.1",
+    "jwt-decode": "^2.2.0",
     "mdbreact": "^4.22.0",
     "nodemon": "^1.19.4",
     "react": "^16.11.0",
