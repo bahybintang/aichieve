@@ -93,7 +93,7 @@ export default class Register extends Component {
           </li>
         </ul>
       </form>
-      <p style={{textAlign: "center", justifyContent: "center"}}>Already have an account? <Link to="/login"> Login </Link> </p>
+      <p style={{textAlign: "center", justifyContent: "center", marginTop: "-50px"}}>Already have an account? <Link to="/login"> Login </Link> </p>
     </div>
     </Col>
     <Col>
