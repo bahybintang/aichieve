@@ -40,7 +40,6 @@ export default class Register extends Component {
         console.log(data);
         this.auth.setToken(data.token);
         this.props.history.push('/');
-        console.log(data);
       })
       .catch(err => {
         console.error(err);
