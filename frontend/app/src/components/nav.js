@@ -7,7 +7,6 @@ class Navi extends Component {
         onFormSubmit = (e) => {
             e.preventDefault();
             this.props.onFormSubmit(this.state.text)
-            console.log(this.state.text)
         };
 
         render() {

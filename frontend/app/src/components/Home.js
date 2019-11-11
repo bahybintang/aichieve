@@ -11,7 +11,7 @@ export default class Home extends Component {
         super();
         this.state = {
             loggedIn: false,
-            title: ''
+            projects: []
         }
         this.homeOpt = this.homeOpt.bind(this);
     }
@@ -19,12 +19,11 @@ export default class Home extends Component {
     componentDidMount() {
         if (Auth.loggedIn()) {
             this.setState({ loggedIn: true });
+                    this.onTermSubmit("");
         }
-
-        this.onTermSubmit(this.state.title);
     }
 
-    onTermSubmit = async (term) => {
+    onTermSubmit = (term) => {
       fetch('http://localhost:8080/idea/get', {
       method: 'GET',
       headers: {
@@ -32,20 +31,21 @@ export default class Home extends Component {
         'token' : Auth.getToken()
       },
       params: {
-        'title' : this.state.title
+        'title' : term
       }
       })
       .then(res => {
-        console.log(res)
-        if (res.status === 200) return res.json()
-        else return Promise.reject(res.error)
+       if (res.status === 200) return res.json()
+       else return Promise.reject(res.error)
       })
-      .then(data => {
-        console.log(data);
+      .then(item => {
+        console.log(item);
+        this.setState ({projects: item.data});
+        console.log(this.state.projects);
         })
       .catch(err => {
         console.error(err);
-        alert('Gagal Login');
+        alert('ERROR');
       });
     }
 
@@ -55,7 +55,7 @@ export default class Home extends Component {
           <div>
           <Navbar onFormSubmit={this.onTermSubmit}/>
           <br />
-          <Card />
+          <Card projects={this.state.projects}/>
           </div>
           );
       }
