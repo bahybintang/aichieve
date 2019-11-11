@@ -2008,6 +2008,10 @@ nav a:hover {
   background: rgba(91, 159, 227, 0.7);
 }
 
+.banner-area .overlay-bg2 {
+  background: rgba(91, 159, 227, 0.98);
+}
+
 @media (max-width: 767px) {
   .banner-area .fullscreen {
     height: 600px !important;
