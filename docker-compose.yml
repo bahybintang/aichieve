@@ -5,34 +5,34 @@ services:
     image: mongo
     volumes:
       - mongodata:/data/db
-    ports:
-      - "27017:80"
+    expose:
+      - "80"
   aichieve-auth:
     build: auth/.
     container_name: auth
-    ports:
-      - "49001:80"
+    expose:
+      - "80"
     depends_on:
       - aichieve-mongodb
   aichieve-idea:
     build: idea/.
     container_name: idea
-    ports:
-      - "49002:80"
+    expose:
+      - "80"
     depends_on:
       - aichieve-mongodb
   aichieve-main:
     build: main/.
     container_name: main
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - aichieve-mongodb
   aichieve-frontend:
     build: frontend/.
     container_name: frontend
-    ports:
-      - "49004:80"
+    expose:
+      - "80"
     depends_on:
       - aichieve-mongodb
 
