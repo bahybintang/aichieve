@@ -19,7 +19,7 @@ export default class Home extends Component {
     componentDidMount() {
         if (Auth.loggedIn()) {
             this.setState({ loggedIn: true });
-                    this.onTermSubmit("");
+            this.onTermSubmit('');
         }
     }
 
@@ -31,7 +31,8 @@ export default class Home extends Component {
         'token' : Auth.getToken()
       },
       params: {
-        'title' : term
+        'title' : term,
+        'description' : term
       }
       })
       .then(res => {
@@ -39,7 +40,6 @@ export default class Home extends Component {
        else return Promise.reject(res.error)
       })
       .then(item => {
-        console.log(item);
         this.setState ({projects: item.data});
         console.log(this.state.projects);
         })

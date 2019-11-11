@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card} from 'react-bootstrap';
 
-const kartuItem = ({project}) => { 
+const KartuItem = ({project}) => { 
 	return (
 		<Card>
                 <Card.Body>
@@ -10,11 +10,8 @@ const kartuItem = ({project}) => {
                     {project.description}
                   </Card.Text>
                 </Card.Body>
-                <Card.Footer>
-                  <small className="text-muted">Footer</small>
-                </Card.Footer>
          </Card>
 	);
 };
 
-export default kartuItem;
+export default KartuItem;

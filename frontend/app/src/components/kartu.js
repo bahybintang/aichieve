@@ -1,14 +1,14 @@
 import React from 'react';
 import  { CardDeck, Container }  from 'react-bootstrap';
-import kartuItem from './kartuItem';
+import KartuItem from './KartuItem';
 
 const cardDeck = ({projects}) => {
       const renderedList = projects.map(project => {
             return (
-                  <kartuItem 
+                  <KartuItem 
                   key = {project._id}
                   project = {project}
-                  /> 
+                  />
             );
       });
 
@@ -16,7 +16,7 @@ const cardDeck = ({projects}) => {
             <Container>
             <CardDeck>
               {renderedList}
-              </CardDeck>
+            </CardDeck>
             </Container>
         );
       }
