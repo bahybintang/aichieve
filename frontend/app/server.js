@@ -6,7 +6,7 @@ dotenv.config()
 
 app.use(express.static(path.join(__dirname, "build")))
 
-app.get(['/', '/login'], (req, res) => {
+app.get("*", (req, res) => {
     res.sendFile(__dirname + '/build/index.html')
 })
 
