@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import  { Navbar, Nav, Form, FormControl, Button, Container }  from 'react-bootstrap';
 
 class Navi extends Component {
+        state = {text: ''};
+
+        onFormSubmit = (e) => {
+            e.preventDefault();
+            this.props.onFormSubmit(this.state.text)
+            console.log(this.state.text)
+        };
+
         render() {
             const brand = {
             fontFamily: "montserrat",
@@ -23,9 +31,15 @@ class Navi extends Component {
             <Nav.Link href="/" style={{fontSize: "2vh"}}>Home</Nav.Link>
             <Nav.Link href="/addIdea" style={{fontSize: "2vh"}}>add Idea</Nav.Link>
             </Nav>
-            <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-light">Search</Button>
+            <Form inline onSubmit={this.onFormSubmit}>
+            <FormControl 
+                type="text" 
+                placeholder="Search" 
+                className="mr-sm-2" 
+                value={this.state.text} 
+                onChange={e => this.setState({text: e.target.value})}
+            />
+            <Button variant="outline-light" onClick={this.onFormSubmit}>Search</Button>
             </Form>
             </Container>
             </Navbar>

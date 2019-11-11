@@ -10,7 +10,8 @@ export default class Home extends Component {
     constructor() {
         super();
         this.state = {
-            loggedIn: false
+            loggedIn: false,
+            title: ''
         }
         this.homeOpt = this.homeOpt.bind(this);
     }
@@ -19,13 +20,40 @@ export default class Home extends Component {
         if (Auth.loggedIn()) {
             this.setState({ loggedIn: true });
         }
+
+        this.onTermSubmit(this.state.title);
+    }
+
+    onTermSubmit = async (term) => {
+      fetch('http://localhost:8080/idea/get', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'token' : Auth.getToken()
+      },
+      params: {
+        'title' : this.state.title
+      }
+      })
+      .then(res => {
+        console.log(res)
+        if (res.status === 200) return res.json()
+        else return Promise.reject(res.error)
+      })
+      .then(data => {
+        console.log(data);
+        })
+      .catch(err => {
+        console.error(err);
+        alert('Gagal Login');
+      });
     }
 
     homeOpt (){
       if (this.state.loggedIn){
         return (
           <div>
-          <Navbar />
+          <Navbar onFormSubmit={this.onTermSubmit}/>
           <br />
           <Card />
           </div>

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class background1 extends Component {
-	render(){
+const background1 = () => {
+
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="65vh" height="45vh" viewBox="0 0 499 375" version="1.1">
         <g id="surface1">
@@ -47,4 +47,4 @@ export default class background1 extends Component {
       </svg>
 		);
 }
-}
+export default background1;
