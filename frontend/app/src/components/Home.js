@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './nav';
-import kartu from './kartu';
+import Card from './kartu';
 import AuthService from './util/auth';
 import '../css/Home.css';
 
@@ -25,12 +25,9 @@ export default class Home extends Component {
       if (this.state.loggedIn){
         return (
           <div>
-          <div>
           <Navbar />
-          </div>
-          <div>
-          <kartu />
-          </div>
+          <br />
+          <Card />
           </div>
           );
       }
