@@ -61,7 +61,7 @@ app.get('/idea/get', auth.user, (req, res) => {
         ]
     }
 
-    Ideas.find(query)
+    Idea.find(query)
         .then(data => {
             res.send({ status: "success", data })
         })
@@ -75,9 +75,9 @@ app.delete('/idea/:ideaID/delete', auth.user, (req, res) => {
     let query = { _id: req.params.ideaID, userID: payload.username }
     if (res.locals.isAdmin) delete query.userID
 
-    Ideas.findOneAndDelete(query)
+    Idea.findOneAndDelete(query)
         .then(data => {
-            if (data == undefined) return Promise.reject(new Error("ideas not found"))
+            if (data == undefined) return Promise.reject(new Error("Idea not found"))
             res.send({ status: "success", message: `Successfully deleted ${data.title}!` })
         })
         .catch(err => {
@@ -90,9 +90,9 @@ app.put('/idea/:ideaID/update', auth.user, (req, res) => {
     let query = { _id: req.params.ideaID, userID: payload.username }
     if (res.locals.isAdmin) delete query.userID
 
-    Ideas.findOneAndUpdate(query, req.body)
+    Idea.findOneAndUpdate(query, req.body)
         .then(data => {
-            if (data == undefined) return Promise.reject(new Error("ideas not found"))
+            if (data == undefined) return Promise.reject(new Error("Idea not found"))
             res.send({ status: "success", message: `Successfully updated ${data.title}!` })
         })
         .catch(err => {
