@@ -21,11 +21,13 @@ services:
       - "80"
     depends_on:
       - aichieve-mongodb
+    extra_hosts:
+
   aichieve-main:
     build: main/.
     container_name: main
     ports:
-      - "80:8080"
+      - "80:80"
     depends_on:
       - aichieve-mongodb
   aichieve-frontend:
