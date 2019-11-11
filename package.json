@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"cd main/app && npm run dev\" \"cd idea/app && npm run dev\" \"cd auth/app && npm run dev\" \"cd frontend/app && npm run dev\"",
+    "dev": "concurrently \"cd main/app && npm run dev\" \"cd idea/app && npm run dev\" \"cd auth/app && npm run dev\" \"cd frontend/app && npm run dev\" \"cd frontend/app && npm start\"",
     "prod": "docker compose up"
   },
   "repository": {

@@ -16,9 +16,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "env-cmd -f ./dev.env nodemon server.js",
+    "dev": "env-cmd -f ./dev.env node server.js",
     "prod": "env-cmd -f ./prod.env node server.js"
   },
+  "proxy":"http://localhost:8080",
   "eslintConfig": {
     "extends": "react-app"
   },

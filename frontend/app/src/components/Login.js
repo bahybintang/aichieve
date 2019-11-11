@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import '../css/Login.css'
 import auth from './util/auth'
+const Auth = new auth()
 
 export default class Register extends Component {
   constructor(props) {
@@ -12,7 +13,6 @@ export default class Register extends Component {
       username: '',
       password: ''
     };
-    this.auth = new auth();
   }
 
   handleInputChange = (event) => {
@@ -24,26 +24,24 @@ export default class Register extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    fetch('http://localhost:8080/auth/login', {
+    fetch(`/auth/login`, {
       method: 'POST',
       body: JSON.stringify({ username: this.state.username, password: this.state.password }),
       headers: {
         'Content-Type': 'application/json'
       }
     })
-      .then(res => {
-        console.log(res)
-        if (res.status === 200) return res.json()
-        else return Promise.reject(res.error)
-      })
+      .then(res => res.json())
       .then(data => {
-        console.log(data);
-        this.auth.setToken(data.token);
-        this.props.history.push('/');
+        if (data.status === "success") {
+          Auth.setToken(data.token);
+          this.props.history.push('/');
+        }
+        else return Promise.reject(data.message)
       })
       .catch(err => {
         console.error(err);
-        alert('Gagal Login');
+        alert(err);
       });
   }
 

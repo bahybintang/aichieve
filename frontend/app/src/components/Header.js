@@ -15,7 +15,7 @@ class Header extends Component {
                             <tr>
                                     <td>
                                     <h2>AICHIEVE</h2>
-                                    <p>Get your idea!</p>
+                                    <p>Get your ideas!</p>
                                 </td>
                             </tr>
                         </tbody>

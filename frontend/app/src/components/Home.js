@@ -24,7 +24,7 @@ export default class Home extends Component {
     }
 
     onTermSubmit = (term) => {
-      fetch('http://localhost:8080/idea/get', {
+      fetch(`/idea/get`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
