@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Navbar from './nav';
 import '../css/Home.css';
 
 import AuthService from './util/auth';
@@ -24,8 +25,10 @@ export default class Home extends Component {
     homeOpt (){
       if (this.state.loggedIn){
         return (
+          <div>
+          <Navbar />
           <section className="banner-area relative">
-            <div className="overlay overlay-bg" />
+            <div className="overlay overlay-bg2" />
               <div className="container">
                 <div className="row fullscreen align-items-center justify-content-center" style={{height: "100vh"}}>
                   <div className="col-lg-10">
@@ -36,6 +39,7 @@ export default class Home extends Component {
                 </div>
               </div>
             </section>
+          </div>
           );
       }
       else {
