@@ -10,6 +10,9 @@ const KartuItem = ({project}) => {
                     {project.description}
                   </Card.Text>
                 </Card.Body>
+                <Card.Footer>
+                <small className="text-muted">{project.userID}</small>
+                </Card.Footer>
          </Card>
 	);
 };

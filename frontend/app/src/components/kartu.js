@@ -1,6 +1,6 @@
 import React from 'react';
-import  { CardDeck, Container }  from 'react-bootstrap';
-import KartuItem from './kartuItem';
+import  { CardColumns, Container }  from 'react-bootstrap';
+import KartuItem from './KartuItem';
 
 const cardDeck = ({projects}) => {
       const renderedList = projects.map(project => {
@@ -14,9 +14,9 @@ const cardDeck = ({projects}) => {
 
       return (
             <Container>
-            <CardDeck>
+            <CardColumns>
               {renderedList}
-            </CardDeck>
+            </CardColumns>
             </Container>
         );
       }
