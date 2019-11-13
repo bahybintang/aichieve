@@ -30,7 +30,7 @@ mongoose.connect(connectionString, options, err => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post('/idea/:userID/add', auth.user , (req, res) => {
+app.post('/idea/:userID/add', auth.user, (req, res) => {
     let payload = jwt.decode(req.headers.token)
     if (req.body.title != undefined && req.body.description != undefined) {
         User.findOne({ username: req.params.userID })
@@ -50,15 +50,17 @@ app.post('/idea/:userID/add', auth.user , (req, res) => {
 })
 
 app.get('/idea/get', auth.user, (req, res) => {
-    var titleQ = new RegExp(escapeRegExp(req.query.title) || "", "i")
-    var descriptionQ = new RegExp(escapeRegExp(req.query.description) || "", "i")
-    var userIDQ = new RegExp(escapeRegExp(req.query.userID) || "", "i")
     var query = {
-        $and: [
-            { title: { $regex: titleQ } },
-            { description: { $regex: descriptionQ } },
-            { userID: { $regex: userIDQ } }
-        ]
+        $or: []
+    }
+    if (req.query.title != undefined) {
+        query.$or.push({ title: { $regex: new RegExp(escapeRegExp(req.query.title), "i") } })
+    }
+    if (req.query.description != undefined) {
+        query.$or.push({ description: { $regex: new RegExp(escapeRegExp(req.query.description), "i") } })
+    }
+    if (req.query.userID != undefined) {
+        query.$or.push({ userID: { $regex: new RegExp(escapeRegExp(req.query.userID), "i") } })
     }
 
     Idea.find(query)
@@ -107,12 +109,12 @@ app.post('/idea/:ideaID/request', auth.user, (req, res) => {
         Idea.findOne({ _id: query._id })
             .then(data => {
                 if (data == undefined) return Promise.reject(new Error("idea not found!"))
-                else if(query.ideaOwnerID != data.userID) return Promise.reject(new Error("user id of owner doesn't match with your query"))
-                else if(data.userID === payload.username) return Promise.reject(new Error("You cannot request to join your own idea"))
-                return Request.findOne({ requesterID: query.requesterID, ideaID: query._id})
-            })  
+                else if (query.ideaOwnerID != data.userID) return Promise.reject(new Error("user id of owner doesn't match with your query"))
+                else if (data.userID === payload.username) return Promise.reject(new Error("You cannot request to join your own idea"))
+                return Request.findOne({ requesterID: query.requesterID, ideaID: query._id })
+            })
             .then(data => {
-                if(data == undefined) return new Request({ requesterID: query.requesterID, ideaOwnerID: query.ideaOwnerID, ideaID: query._id}).save()
+                if (data == undefined) return new Request({ requesterID: query.requesterID, ideaOwnerID: query.ideaOwnerID, ideaID: query._id }).save()
                 return Promise.reject(new Error("You already requested to join this idea"))
             })
             .then(data => {
@@ -129,21 +131,21 @@ app.post('/idea/:ideaID/request', auth.user, (req, res) => {
 
 app.post('/idea/:ideaID/offer', auth.user, (req, res) => {
     let payload = jwt.decode(req.headers.token)
-    let query = { _id: req.params.ideaID, requestedUserID: req.body.requestedUserID, offererID: payload.username}
+    let query = { _id: req.params.ideaID, requestedUserID: req.body.requestedUserID, offererID: payload.username }
     if (req.params.ideaID != undefined && req.body.requestedUserID != undefined) {
         Idea.findOne({ _id: query._id })
             .then(data => {
                 if (data == undefined) return Promise.reject(new Error("idea not found!"))
-                else if(data.userID !== query.offererID) return Promise.reject(new Error("You cannot offer idea that you don't own"))
-                else if(query.offererID === query.requestedUserID) return Promise.reject(new Error("You cannot offer idea to your own self"))
-                else return User.findOne({ username: req.body.requestedUserID})
+                else if (data.userID !== query.offererID) return Promise.reject(new Error("You cannot offer idea that you don't own"))
+                else if (query.offererID === query.requestedUserID) return Promise.reject(new Error("You cannot offer idea to your own self"))
+                else return User.findOne({ username: req.body.requestedUserID })
             })
             .then(data => {
-                if(data == undefined) return Promise.reject(new Error("user not found!"))
-                return Offer.findOne({ requestedUserID: query.requestedUserID, ideaOwnerID: query.offererID, ideaID: query._id})
+                if (data == undefined) return Promise.reject(new Error("user not found!"))
+                return Offer.findOne({ requestedUserID: query.requestedUserID, ideaOwnerID: query.offererID, ideaID: query._id })
             })
             .then(data => {
-                if (data == undefined) return new Offer({ requestedUserID: query.requestedUserID, ideaOwnerID: query.offererID, ideaID: query._id}).save()
+                if (data == undefined) return new Offer({ requestedUserID: query.requestedUserID, ideaOwnerID: query.offererID, ideaID: query._id }).save()
                 return Promise.reject(new Error("You already offered to this user"))
             })
             .then(data => {
