@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import  { Navbar, Nav, Form, FormControl, Button, Container }  from 'react-bootstrap';
+import AuthService from './util/auth';
+
+const Auth = new AuthService();
 
 class Navi extends Component {
         state = {text: ''};
@@ -7,6 +10,11 @@ class Navi extends Component {
         onFormSubmit = (e) => {
             e.preventDefault();
             this.props.onFormSubmit(this.state.text)
+        };
+
+        handleLogout() {
+            Auth.logout();
+            this.props.history.replace("/");
         };
 
         render() {
@@ -29,6 +37,7 @@ class Navi extends Component {
             <Nav className="mr-auto" style={{marginLeft: "50px"}}>
             <Nav.Link href="/" style={{fontSize: "2vh"}}>Home</Nav.Link>
             <Nav.Link href="/addIdea" style={{fontSize: "2vh"}}>add Idea</Nav.Link>
+            <Nav.Link href="/" onClick={this.handleLogout} style={{fontSize: "2vh"}}>Logout</Nav.Link>
             </Nav>
             <Form inline onSubmit={this.onFormSubmit}>
             <FormControl 
