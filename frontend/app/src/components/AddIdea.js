@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from './nav';
 import AuthService from './util/auth';
+import decode from 'jwt-decode';
 
 const Auth = new AuthService();
 
@@ -24,9 +25,10 @@ export default class addIdea extends Component {
 	    console.log(this.state.skills_required);
 	  }
 
-	  onSubmit = (event) => {
+	  onSubmit = async (event) => {
 	  	event.preventDefault();
 	  	const username = Auth.getUsername();
+	  	console.log(username)
 	    fetch(`/idea/${username}/add`, {
 	      method: 'POST',
 	      body: JSON.stringify(this.state),
@@ -38,7 +40,6 @@ export default class addIdea extends Component {
 	      .then(res => res.json())
 	      .then(data => {
 	        if (data.status === "success") {
-	          Auth.setToken(data.token);
 	          this.props.history.push('/');
 	        }
 	        else return Promise.reject(data.message)

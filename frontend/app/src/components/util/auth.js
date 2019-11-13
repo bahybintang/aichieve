@@ -1,6 +1,5 @@
 import decode from 'jwt-decode';
 
-
 export default class AuthService {
     constructor() {
         this.fetch = this.fetch.bind(this)
@@ -35,7 +34,7 @@ export default class AuthService {
     }
 
     getProfile() {
-        return decode(this.getToken());
+        return decode(this.getToken())
     }
 
     loggedIn() {
@@ -61,7 +60,8 @@ export default class AuthService {
 
     isAdmin(){
         if(this.loggedIn()){
-            return !!this.getProfile().admin
+            if (this.getProfile().role === "admin") return true;
+            else return false;
         }
     }
 
