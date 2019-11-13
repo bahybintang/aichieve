@@ -1,4 +1,6 @@
 import React from 'react';
+import decode from 'jwt-decode';
+
 
 export default class AuthService {
     // Initializing important variables

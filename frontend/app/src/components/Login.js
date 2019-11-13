@@ -24,7 +24,7 @@ export default class Register extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    fetch(`/auth/login`, {
+    fetch('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ username: this.state.username, password: this.state.password }),
       headers: {

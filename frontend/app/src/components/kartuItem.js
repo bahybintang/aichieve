@@ -17,7 +17,7 @@ const KartuItem = ({project}) => {
   const renderedList2 = project.skills_required.map(skill => {
             return (
                   <ol >
-                    <li style={{listStyleType: "circle"}}>
+                    <li style={{listStyleType: "circle", marginLeft: "20px"}}>
                       {skill}
                     </li>
                   </ol>
@@ -28,7 +28,7 @@ const KartuItem = ({project}) => {
   	return (
 		<Card style={kartu1}>
                 <Card.Body>
-                  <Card.Title>{project.title}</Card.Title>
+                  <h3 style={{fontFamily: "quicksand", fontWeight: "700", textTransform: "capitalize"}}>{project.title}</h3>
                   <Card.Text>
                     {project.description}
                   </Card.Text>
