@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './nav';
 import AuthService from './util/auth';
-import { Link } from 'react-router-dom';
 
 const Auth = new AuthService();
 
@@ -28,7 +27,7 @@ export default class addIdea extends Component {
 	  onSubmit = (event) => {
 	  	event.preventDefault();
 	  	const username = Auth.getUsername();
-	    fetch('/idea/${username}/add', {
+	    fetch(`/idea/${username}/add`, {
 	      method: 'POST',
 	      body: JSON.stringify(this.state),
 	      headers: {

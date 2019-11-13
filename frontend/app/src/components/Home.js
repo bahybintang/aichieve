@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './nav';
-import Card from './kartu';
+import CardDeck from './kartu';
 import AuthService from './util/auth';
 import '../css/Home.css';
 
@@ -30,19 +30,20 @@ export default class Home extends Component {
       headers: {
         'Content-Type': 'application/json',
         'token': Auth.getToken()
-      }
+      }      
     })
-      .then(res => {
-        if (res.status === 200) return res.json()
-        else return Promise.reject(res.error)
-      })
+      .then(res => res.json())
       .then(item => {
-        this.setState({ projects: item.data });
-        console.log(this.state.projects);
+        if (item.status === "success") {
+          console.log(item);
+          this.setState({ projects: item.data });
+          console.log(this.state.projects);
+        }
+        else return Promise.reject(item.message)
       })
       .catch(err => {
         console.error(err);
-        alert('ERROR');
+        alert(err);
       });
   }
 
@@ -52,7 +53,7 @@ export default class Home extends Component {
         <div>
           <Navbar onFormSubmit={this.onTermSubmit} />
           <br />
-          <Card projects={this.state.projects} />
+          <CardDeck projects={this.state.projects} />
         </div>
       );
     }
