@@ -53,14 +53,11 @@ app.get('/idea/get', auth.user, (req, res) => {
     var query = {
         $or: []
     }
-    if (req.query.title != undefined) {
-        query.$or.push({ title: { $regex: new RegExp(escapeRegExp(req.query.title), "i") } })
-    }
-    if (req.query.description != undefined) {
-        query.$or.push({ description: { $regex: new RegExp(escapeRegExp(req.query.description), "i") } })
-    }
-    if (req.query.userID != undefined) {
-        query.$or.push({ userID: { $regex: new RegExp(escapeRegExp(req.query.userID), "i") } })
+
+    for (var key of Object.keys(req.query)) {
+        var pushed = {}
+        pushed[key] = { $regex: new RegExp(escapeRegExp(req.query[key]), "i") }
+        query.$or.push(pushed)
     }
 
     Idea.find(query)
