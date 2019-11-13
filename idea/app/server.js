@@ -157,7 +157,6 @@ app.post('/idea/:ideaID/offer', auth.user, (req, res) => {
     }
 })
 
-
 app.listen(process.env.PORT, process.env.HOST, () => console.log(`Idea app listening on http://${process.env.HOST}:${process.env.PORT}!`))
 
 function escapeRegExp(string) {

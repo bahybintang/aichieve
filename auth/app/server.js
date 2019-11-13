@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const User = require('./model/user')
+const Offer = require('./model/offer')
+const Idea = require('./model/idea.js')
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const auth = require('./middleware/jwt_auth')
@@ -135,6 +137,62 @@ app.get('/users', auth.user, (req, res) => {
             console.log(err)
             res.status(500).send({ status: "failed", message: err.toString() })
         })
+})
+
+app.get('/users/:userID/offers', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { username: req.params.userID }
+
+    if( query.username != payload.username) res.status(400).send({ status: "failed", message:"unauthenticated"})
+    Offer.find({ requestedUserID: query.username })
+        .then(data => {
+            if(data != undefined) res.send({ status: "success", data})
+            else res.send({ status: "success", data: "empty"})
+        })
+        .catch(err => {
+            res.status(400).send({ status: "failed", message: err.toString() })
+        })
+})
+
+app.post('/users/:userID/offers/:offerID', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { username: req.params.userID, offerID: req.params.offerID, action: req.body.action}
+    if(query.action != undefined && query.action != 'accept' && query.action != 'decline'){
+        res.status(400).send({ status:"failed", message:"gak ngerti kamu mau ngapain :("})
+    }
+    if (req.params.userID != undefined && req.params.offerID != undefined && req.body.action != undefined) {
+        if(payload.username != query.username ) res.status(400).send({status:"failed", message:"unauthenticated"})
+        Offer.findOne({ _id: query.offerID, requestedUserID: query.username })
+            .then(data => {
+                if(data != undefined){
+                    if (query.action == 'accept') {
+                        Idea.findOne({_id: data.ideaID})
+                            .then(data => {
+                                let originalUser = data.joined_user
+                                originalUser.push(query.username)
+                                return Idea.findOneAndUpdate({ _id: data._id}, {joined_user: originalUser })
+                            })
+                            .then(data => {
+                                Offer.deleteOne({_id:query.offerID}, err => {
+                                    res.status(400).send({status: "failed", message: err})
+                                })
+                                res.send({status:"success", message:"successfully appended user"})
+                                // TODO: return idea yg baru
+                            })
+                            .catch(err => {
+                                res.status(400).send({status: "failed", message: err.toString()})
+                            })
+                    } else {
+                        Offer.deleteOne({_id:query.offerID}, err => {
+                            res.status(400).send({status: "failed", message: err.toString()})
+                        })
+                    }
+                }
+                res.status(400).send({status:"failed", message:"no offer found"})
+            })
+    } else {
+        res.status(400).send({ status: "failed", message: "Pliss fill all slurr :((" })
+    }
 })
 
 app.listen(process.env.PORT, process.env.HOST, () => console.log(`Auth app listening on http://${process.env.HOST}:${process.env.PORT}!`))
