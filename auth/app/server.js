@@ -106,13 +106,15 @@ app.put('/users/:userID/update', auth.user, (req, res) => {
 
 app.get('/users', auth.user, (req, res) => {
     var query = {
-        $and: [
-            { username: { $regex: new RegExp(escapeRegExp(req.query.username) || "", "i") } },
-            { name: { $regex: new RegExp(escapeRegExp(req.query.name) || "", "i") } },
-            { role: { $regex: new RegExp(escapeRegExp(req.query.role) || "", "i") } },
-            { bio: { $regex: new RegExp(escapeRegExp(req.query.bio) || "", "i") } }
-        ]
+        $or: []
     }
+
+    for (var key of Object.keys(req.query)) {
+        var pushed = {}
+        pushed[key] = { $regex: new RegExp(escapeRegExp(req.query[key]), "i") }
+        query.$or.push(pushed)
+    }
+    
     try {
         var idea = JSON.parse(req.query.joined_idea)
         var pushed = { $or: idea.map(val => { return { joined_idea: val } }) }
