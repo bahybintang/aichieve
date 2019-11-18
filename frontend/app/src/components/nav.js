@@ -37,6 +37,7 @@ class Navi extends Component {
             <Nav className="mr-auto" style={{marginLeft: "50px"}}>
             <Nav.Link href="/" style={{fontSize: "2vh"}}>Home</Nav.Link>
             <Nav.Link href="/addIdea" style={{fontSize: "2vh"}}>add Idea</Nav.Link>
+            <Nav.Link href="/notif" style={{fontSize: "2vh"}}>Notif</Nav.Link>
             <Nav.Link href="/" onClick={this.handleLogout} style={{fontSize: "2vh"}}>Logout</Nav.Link>
             </Nav>
             <Form inline onSubmit={this.onFormSubmit}>

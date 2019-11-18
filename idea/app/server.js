@@ -56,7 +56,8 @@ app.get('/idea/get', auth.user, (req, res) => {
 
     for (var key of Object.keys(req.query)) {
         var pushed = {}
-        pushed[key] = { $regex: new RegExp(escapeRegExp(req.query[key]), "i") }
+        if (key == "_id") pushed[key] = req.query[key]
+        else pushed[key] = { $regex: new RegExp(escapeRegExp(req.query[key]), "i") }
         query.$or.push(pushed)
     }
 
