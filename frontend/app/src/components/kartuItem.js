@@ -19,9 +19,9 @@ export default class KartuItem extends React.Component {
           width: "50vw",
           height: "30vw",
           position: "absolute",
-          left: "25%",
-          top: "12%",
-          translate: "transform(-50%, -50%)"
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)"
         }
       },
       butAccept: {
