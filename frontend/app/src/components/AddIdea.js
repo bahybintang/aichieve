@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Navbar from './nav';
 import AuthService from './util/auth';
 import decode from 'jwt-decode';
+import {Button} from 'react-bootstrap';
 
 const Auth = new AuthService();
 
@@ -48,10 +49,40 @@ export default class addIdea extends Component {
         console.error(err);
         alert(err);
       });
-  }
+ 	 }
 
+	inputChangedHandler = (event, index) => {
+	    const updatedSkills = [...this.state.skills_required];
+	    updatedSkills[index] = event.target.value;
+	    this.setState({ skills_required: updatedSkills });
+	};
+
+	onAddInput = (e) => {
+		e.preventDefault();
+	    const UpdatedArray = this.state.skills_required.concat('');
+	    this.setState({ skills_required: UpdatedArray });
+	};
 
   render() {
+  	const formSkillements = this.state.skills_required.map((formSkill, index) =>  {
+  		 	return (
+  		 	<div key={index}>
+  		 	<li style={{marginBottom: '20px', border: '1px solid #DDDDDD'}}>
+            <label htmlFor="skills_required">{`Skills #${index + 1}`}</label>
+	              <input 
+	              	type="text"
+	              	name="skills_required"
+	                placeholder=""
+	                value={formSkill}
+	                onChange={event => this.inputChangedHandler(event, index)}
+	                required />
+	                </li>
+	        </div>
+
+    		);
+  		 });
+
+
     return (
       <div>
         <Navbar />
@@ -80,17 +111,15 @@ export default class addIdea extends Component {
                 required />
               <span>Masukkan Deskripsi Project Anda!</span>
             </li>
+			<div style={{display: "block", textAlign: "center"}}>
+			<Button onClick={this.onAddInput} style={{marginBottom: '20px'}}>Add Skills Requirements</Button>
+			</div>
+			<br />
 
-            <li>
-              <label htmlFor="skills_required">Skills Required</label>
-              <input type="text"
-                name="skills_required"
-                placeholder=""
-                value={this.state.skills_required}
-                onChange={this.handleInputChange}
-                required />
-              <span>Masukkan Skill yang Dibutuhkan!</span>
-            </li>
+			
+			{formSkillements}
+			
+			<br />
 
             <li>
               <label htmlFor="status">Status Project</label>
