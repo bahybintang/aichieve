@@ -54,7 +54,7 @@ export default class Register extends Component {
               <h1 className="aichieve">AICHIEVE </h1>
             </div>
 
-            <div style={{ marginTop: "40%" }}>
+            <div style={{ marginTop: "20%" }}>
               <Background1 />
             </div>
           </Col>
@@ -65,7 +65,7 @@ export default class Register extends Component {
             </div>
 
             <div>
-              <form onSubmit={this.onSubmit} className="formStyle" style={{ marginTop: "100px" }}>
+              <form onSubmit={this.onSubmit} className="formStyle" style={{ marginTop: "50px" }}>
                 <h1 className="tagline" style={{ paddingBottom: "50px" }}>Login</h1>
                 <ul>
                   <li>

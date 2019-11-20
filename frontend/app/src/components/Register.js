@@ -58,7 +58,7 @@ export default class Register extends Component {
             </div>
             <div>
               <form onSubmit={this.onSubmit} className="formStyle">
-                <h1>Register</h1>
+                <h1 className="tagline">Register</h1>
                 <ul>
                   <li>
                     <label htmlFor="name">Nama</label>

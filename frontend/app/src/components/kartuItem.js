@@ -30,7 +30,7 @@ export default class KartuItem extends React.Component {
         bottom: "5px"
       },
       kartu1: {
-        marginBottom: "60px",
+        marginBottom: "20px",
         border: "none",
         boxShadow: "0px 10px 13px -6px rgba(0, 0, 0, 0.08), 0px 20px 31px 3px rgba(0, 0, 0, 0.09), 0px 8px 20px 7px rgba(0, 0, 0, 0.02)"
       }
