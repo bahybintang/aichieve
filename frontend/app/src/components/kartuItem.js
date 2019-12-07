@@ -29,6 +29,11 @@ export default class KartuItem extends React.Component {
         right: "10%",
         bottom: "5px"
       },
+      butDelete: {
+        position: "absolute",
+        right: "40%",
+        bottom: "5px"
+      },
       kartu1: {
         marginBottom: "20px",
         border: "none",
@@ -77,6 +82,26 @@ export default class KartuItem extends React.Component {
       .then(data => {
         if (data.status === "failed") return Promise.reject(new Error(data.message))
         else alert("Success!")
+      })
+      .catch(err => {
+        alert(err.toString())
+      })
+  }
+
+  delete = () => {
+    fetch(`/idea/${this.props.project._id}/delete`, {
+      method: 'DELETE',
+      headers: {
+        'token': auth.getToken()
+      }
+    })
+      .then(data => data.json())
+      .then(data => {
+        if (data.status === "failed") return Promise.reject(new Error(data.message))
+        else {
+          alert("Success!")
+          window.location.reload()
+        }
       })
       .catch(err => {
         alert(err.toString())
@@ -178,10 +203,10 @@ export default class KartuItem extends React.Component {
             Close
           </Button>
         </Modal>
-
         <Card style={this.state.kartu1}>
           <Card.Body>
             <h3 style={{ fontFamily: "quicksand", fontWeight: "700", textTransform: "capitalize" }}>{this.props.project.title}</h3>
+            <img src={`https://loremflickr.com/200/200/fish?a=${Math.random()}`} alt="rdpic"></img>
             <Card.Text>
               {this.props.project.description}
             </Card.Text>
@@ -189,6 +214,7 @@ export default class KartuItem extends React.Component {
             <h5> Skills Required : </h5>
             {this.renderedList()}
           </Card.Body>
+          {auth.getProfile().username === this.props.project.userID ? <Button variant="danger" style={this.state.butDelete} onClick={this.delete}>Delete</Button> : ""}
           {auth.getProfile().username === this.props.project.userID ? <Button variant="primary" style={this.state.butAccept} onClick={this.openModal}>Offer</Button> : <Button variant="warning" style={this.state.butAccept} onClick={this.request}>Request</Button>}
           <Card.Footer>
             <small className="text-muted">oleh : {this.props.project.userID}</small>
