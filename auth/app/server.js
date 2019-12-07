@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const User = require('./model/user')
 const Offer = require('./model/offer')
+const Request = require('./model/request')
 const Idea = require('./model/idea.js')
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
@@ -157,6 +158,32 @@ app.get('/users/:userID/offers', auth.user, (req, res) => {
                         )
                     }
                 }))
+                res.send({ status: "success", data: newData })
+            }
+            else res.send({ status: "success", data: "empty" })
+        })
+        .catch(err => {
+            res.status(400).send({ status: "failed", message: err.toString() })
+        })
+})
+
+app.get('/users/:userID/requests', auth.user, (req, res) => {
+    let payload = jwt.decode(req.headers.token)
+    let query = { username: req.params.userID }
+
+    if (query.username != payload.username) res.status(400).send({ status: "failed", message: "unauthenticated" })
+    Request.find({ ideaOwnerID: query.username })
+        .then(async data => {
+            if (data != undefined) {
+                var newData = await Promise.all(data.map(async request => {
+                    var ideaData = await Idea.findOne({ _id: request.ideaID })
+                    if (ideaData != undefined) {
+                        return (
+                            { request, idea: ideaData }
+                        )
+                    }
+                }))
+                newData = newData.filter(item => typeof item !== 'undefined')
                 res.send({ status: "success", data: newData })
             }
             else res.send({ status: "success", data: "empty" })

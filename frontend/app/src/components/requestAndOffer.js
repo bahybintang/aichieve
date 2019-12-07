@@ -9,12 +9,14 @@ export default class ReqAndOff extends Component {
     constructor() {
         super();
         this.state = {
-            offers: []
+            offers: [],
+            requests: []
         };
     }
 
     componentWillMount = () => {
         this.getOffer()
+        this.getRequest()
     }
 
     getOffer = () => {
@@ -36,7 +38,7 @@ export default class ReqAndOff extends Component {
     }
 
     getRequest = () => {
-        fetch(`/users/${Auth.getProfile().username}/offers`, {
+        fetch(`/users/${Auth.getProfile().username}/requests`, {
             method: 'GET',
             headers: {
                 'token': Auth.getToken()
@@ -44,9 +46,9 @@ export default class ReqAndOff extends Component {
         })
             .then(data => data.json())
             .then(data => {
-                console.log(data.status)
+                console.log(data.data)
                 if (data.status === "failed") return Promise.reject(new Error(data.message))
-                else this.setState({ offers: data.data })
+                else this.setState({ requests: data.data })
             })
             .catch(err => {
                 alert(err.toString())
@@ -114,7 +116,7 @@ export default class ReqAndOff extends Component {
                     <table>
                         <thead className="table">
                             <tr>
-                                <th>Idea Owner</th>
+                                <th>Requester</th>
                                 <th>Idea Title</th>
                                 <th>Idea Description</th>
                                 <th></th>
@@ -122,14 +124,15 @@ export default class ReqAndOff extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.offers.map(offer => {
+                            {this.state.requests.map(request => {
+                                console.log(request)
                                 return (
                                     <tr>
-                                        <td>{offer.offer.ideaOwnerID}</td>
-                                        <td>{offer.idea.title}</td>
-                                        <td>{offer.idea.description}</td>
-                                        <td><Button onClick={() => { this.acceptOrDeclineOffer('accept', offer.offer._id, Auth.getProfile().username) }} variant="success">Accept</Button></td>
-                                        <td><Button onClick={() => { this.acceptOrDeclineOffer('decline', offer.offer._id, Auth.getProfile().username) }} variant="danger">Decline</Button></td>
+                                        <td>{request.request.requesterID}</td>
+                                        <td>{request.idea.title}</td>
+                                        <td>{request.idea.description}</td>
+                                        <td><Button variant="success">Accept</Button></td>
+                                        <td><Button variant="danger">Decline</Button></td>
                                     </tr>
                                 )
                             })}
