@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './nav';
 import AuthService from './util/auth';
-import decode from 'jwt-decode';
 import {Button} from 'react-bootstrap';
 
 const Auth = new AuthService();
@@ -143,7 +142,7 @@ export default class addIdea extends Component {
               <span>Masukkan Collaboration Pages yang Digunakan!</span>
             </li>
             <li>
-              <input type="submit" Value="Submit" />
+              <input type="submit" value="Submit" />
             </li>
 
           </ul>

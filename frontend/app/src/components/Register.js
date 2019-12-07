@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import {Button} from 'react-bootstrap';
 import Background2 from './background2';
 import '../css/Login.css'
 import AuthService from './util/auth'
@@ -12,7 +13,8 @@ export default class Register extends Component {
     this.state = {
       name: '',
       username: '',
-      password: ''
+      password: '',
+      skills: []
     };
   }
 
@@ -46,7 +48,37 @@ export default class Register extends Component {
       });
   }
 
+  onAddInput = (e) => {
+		e.preventDefault();
+	    const UpdatedArray = this.state.skills.concat('');
+	    this.setState({ skills: UpdatedArray });
+  };
+
+  inputChangedHandler = (event, index) => {
+    const updatedSkills = [...this.state.skills];
+    updatedSkills[index] = event.target.value;
+    this.setState({ skills: updatedSkills });
+};
+
   render() {
+    const formSkillements = this.state.skills.map((formSkill, index) => {
+      return (
+        <div key={index}>
+          <li style={{ marginBottom: '20px', border: '1px solid #DDDDDD' }}>
+            <label htmlFor="skills">{`Skills #${index + 1}`}</label>
+            <input
+              type="text"
+              name="skills"
+              placeholder=""
+              value={formSkill}
+              onChange={event => this.inputChangedHandler(event, index)}
+              required />
+          </li>
+        </div>
+
+      );
+    });
+
     return (
       <Container>
         <Row style={{ marginTop: "100px" }}>
@@ -90,6 +122,10 @@ export default class Register extends Component {
                       required />
                     <span>Masukkan Password Anda!</span>
                   </li>
+                  <div style={{ display: "block", textAlign: "center" }}>
+                    <Button onClick={this.onAddInput} style={{ marginBottom: '20px' }}>Add Skills</Button>
+                  </div>
+                  {formSkillements}
                   <li>
                     <input type="submit" Value="Submit" />
                   </li>

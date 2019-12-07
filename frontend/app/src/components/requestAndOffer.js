@@ -13,7 +13,7 @@ export default class ReqAndOff extends Component {
         };
     }
 
-    componentDidMount = () => {
+    componentWillMount = () => {
         this.getOffer()
     }
 
@@ -26,6 +26,7 @@ export default class ReqAndOff extends Component {
         })
             .then(data => data.json())
             .then(data => {
+                console.log(data.status)
                 if (data.status === "failed") return Promise.reject(new Error(data.message))
                 else this.setState({ offers: data.data })
             })
